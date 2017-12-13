@@ -10,7 +10,8 @@ module Giftrim
     attr_accessor :processor
     Giftrim.processor = "gifsicle"
 
-    def frame_number_wanted total_number, target_number
+    def frame_number_wanted total_number, compress_ratio
+      target_number = compress_ratio > 1 ? total_number : total_number * compress_ratio 
       (0..(total_number-2)).to_a.spread(target_number)
     end
   end
@@ -170,14 +171,14 @@ module Giftrim
       number_of_frames
     end
 
-    def trim
+    def trim(compress_ratio, zoom_ratio)
       @outfile = Tempfile.new('giftrim_')
       @outfile.binmode
       @outfile.close
 
-      frames = Giftrim::frame_number_wanted self.number_of_frames, 10
+      frames = Giftrim::frame_number_wanted self.number_of_frames, compress_ratio
       frames_formatted = frames.map{|frame| "\"##{frame}\""}.join " "
-      command = "#{Giftrim.processor} --unoptimize -O2 --no-comments --no-names --delay 20 --same-loopcount --no-warnings --resize-fit '300x300' #{@path} #{frames_formatted} > #{@outfile.path}"
+      command = "#{Giftrim.processor} --unoptimize -O2 --no-comments --no-names --delay 20 --same-loopcount --no-warnings --scale #{zoom_ratio} #{@path} #{frames_formatted} > #{@outfile.path}"
       trim_run_command command
     end
 
