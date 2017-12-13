@@ -12,7 +12,7 @@ module Giftrim
 
     def frame_number_wanted total_number, compress_ratio
       target_number = compress_ratio > 1 ? total_number : total_number * compress_ratio 
-      (0..(total_number-2)).to_a.spread(target_number)
+      (0..(total_number-1)).to_a.spread(target_number)
     end
   end
 
