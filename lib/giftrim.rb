@@ -171,6 +171,17 @@ module Giftrim
       number_of_frames
     end
 
+    def delay_of_frames
+      command = "#{Giftrim.processor} --info #{@path}"
+      output = run_command command
+      if output
+        first_frame_line = output.lines[7]
+        return 5 if first_frame_line.blank?
+        delay_of_frames = first_frame_line.split(' ').last.gsub('s', '').to_f * 100
+      end
+      delay_of_frames
+    end
+
     def trim(compress_ratio, zoom_ratio)
       @outfile = Tempfile.new('giftrim_')
       @outfile.binmode
@@ -178,7 +189,7 @@ module Giftrim
 
       frames = Giftrim::frame_number_wanted self.number_of_frames, compress_ratio
       frames_formatted = frames.map{|frame| "\"##{frame}\""}.join " "
-      command = "#{Giftrim.processor} --unoptimize -O2 --no-comments --no-names --delay 20 --same-loopcount --no-warnings --scale #{zoom_ratio} #{@path} #{frames_formatted} > #{@outfile.path}"
+      command = "#{Giftrim.processor} --unoptimize -O2 --no-comments --no-names --delay #{delay_of_frames} --same-loopcount --no-warnings --scale #{zoom_ratio} #{@path} #{frames_formatted} > #{@outfile.path}"
       trim_run_command command
     end
 
