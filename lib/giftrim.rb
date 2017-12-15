@@ -135,7 +135,7 @@ module Giftrim
       if sub.exitstatus == 0
         sub.output
       else
-        raise Error, "Command (#{command.inspect.gsub("\\", "")}) failed: #{{:status_code => sub.exitstatus, :output => sub.output}.inspect}"
+        raise "Command (#{command.inspect.gsub("\\", "")}) failed: #{{:status_code => sub.exitstatus, :output => sub.output}.inspect}"
       end
     end
 
