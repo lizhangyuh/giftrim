@@ -190,7 +190,7 @@ module Giftrim
 
       # frames = Giftrim::frame_number_wanted self.number_of_frames, compress_ratio
       # frames_formatted = frames.map{|frame| "\"##{frame}\""}.join " "
-      command = "#{Giftrim.processor} --unoptimize -O2 --no-comments --no-names --delay 4 --same-loopcount --no-warnings --scale #{zoom_ratio} #{@path} > #{@outfile.path}"
+      command = "#{Giftrim.processor} --unoptimize --no-comments --no-names --delay 5 --same-loopcount --no-warnings --scale #{zoom_ratio} #{@path} > #{@outfile.path}"
       puts command
       trim_run_command command
     end
